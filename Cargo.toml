@@ -1,0 +1,19 @@
+[package]
+name = "handler"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+axum = "0.6.2"
+tower-http = { version = "0.4.0", features = ["trace"] }
+tower = { version = "0.4", features = ["util"] }
+hyper = "0.14"
+http = "0.2.9"
+
+[[bin]]
+name = "handler"
+path = "src/main.rs"
