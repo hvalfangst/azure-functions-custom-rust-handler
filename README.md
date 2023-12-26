@@ -1,10 +1,8 @@
 # Azure Functions App with customer handler in Rust utilizing Axum
 
-Azure Function programmed in Rust with the Axum framework, 
-providing endpoints for arithmetic operations.
-A CI/CD pipeline has been implemented with GitHub Actions. 
-It will build, package and deploy this application to Azure Function Apps
-on any repository pushes. Azure resources are provisioned with Terraform.
+Azure Function with customer handler invoking a binary compiled from code written in Rust with the Axum framework.
+The binary 'handler' and associated files (function/host.json) are deployed to Azure Function App via 'func azure functionapp publish'
+Azure resources are provisioned with Terraform.
 
 ## Requirements
 
@@ -27,12 +25,14 @@ The shell script 'down' deallocates Azure resources.
 
 - Run the 'up' script to provision Azure resources.
 
-### 2. Access Azure Portal
+### 2. Build binary
 
-- Open your browser and navigate to the Azure Portal.
+- sudo apt install musl-tools
+- rustup target add x86_64-unknown-linux-musl
+- cargo build --release --target=x86_64-unknown-linux-musl
+- cp target/x86_64-unknown-linux-musl/release/handler .
 
-### 3. Configure Deployment Credentials
 
-- Navigate to your newly created Function App 'hvalfangstfunctionapp'.
-- Download publish profile
-- create new secret 'PUBLISH_PROFILE' in GitHub repository
+### 3. Deploy Custom Binary Azure Function
+
+- func azure functionapp publish hvalfangstlinuxfunctionapp --custom
