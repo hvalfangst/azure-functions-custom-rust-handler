@@ -11,8 +11,8 @@ pub mod service {
     /// # Returns
     ///
     /// The sum of `num1` and `num2`.
-    pub fn add_numbers(num1: i32, num2: i32) -> i32 {
-        num1 + num2
+    pub fn add_numbers(num1: i32, num2: i32) -> f64 {
+        (num1 + num2) as f64
     }
 
     /// Subtracts two numbers.
@@ -25,8 +25,8 @@ pub mod service {
     /// # Returns
     ///
     /// The result of subtracting `num2` from `num1`.
-    pub fn subtract_numbers(num1: i32, num2: i32) -> i32 {
-        num1 - num2
+    pub fn subtract_numbers(num1: i32, num2: i32) -> f64 {
+        (num1 - num2) as f64
     }
 
     /// Multiplies two numbers.
@@ -39,8 +39,8 @@ pub mod service {
     /// # Returns
     ///
     /// The product of `num1` and `num2`.
-    pub fn multiply_numbers(num1: i32, num2: i32) -> i32 {
-        num1 * num2
+    pub fn multiply_numbers(num1: i32, num2: i32) -> f64 {
+        (num1 * num2) as f64
     }
 
     /// Divides two numbers.
@@ -61,26 +61,6 @@ pub mod service {
         }
     }
 
-    /// Calculates the average of a list of numbers.
-    ///
-    /// # Arguments
-    ///
-    /// * `numbers` - A slice containing the list of numbers.
-    ///
-    /// # Returns
-    ///
-    /// `Some(f64)` if the list is not empty, `None` if the list is empty.
-    pub fn get_average(numbers: &[i32]) -> Option<f64> {
-        let sum: i32 = numbers.iter().sum();
-        let count = numbers.len() as i32;
-
-        if count > 0 {
-            Some(sum as f64 / count as f64)
-        } else {
-            None // Cannot calculate average for an empty list
-        }
-    }
-
     /// Returns metadata about available routes.
     ///
     /// # Returns
@@ -89,55 +69,41 @@ pub mod service {
     pub fn routes_metadata() -> Vec<Value> {
         let routes = vec![
             json!({
-            "route": "/arithmetic/add/:num1/:num2",
+            "route": "/api/arithmetic/:mode/:num1/:num2",
             "method": "GET",
-            "description": "Add two numbers",
-            "params_type": "query",
+            "description": "Perform arithmetic operations",
+            "params_type": "path",
             "params": [
-                {"name": "num1", "type": "integer", "required": true},
-                {"name": "num2", "type": "integer", "required": true}
-            ]
-        }),
-            json!({
-            "route": "/arithmetic/subtract/:num1/:num2",
-            "method": "GET",
-            "description": "Subtract two numbers",
-            "params_type": "query",
-            "params": [
-                {"name": "num1", "type": "integer", "required": true},
-                {"name": "num2", "type": "integer", "required": true}
-            ]
-        }),
-            json!({
-            "route": "/arithmetic/multiply/:num1/:num2",
-            "method": "GET",
-            "description": "Multiply two numbers",
-            "params_type": "query",
-            "params": [
-                {"name": "num1", "type": "integer", "required": true},
-                {"name": "num2", "type": "integer", "required": true}
-            ]
-        }),
-            json!({
-            "route": "/arithmetic/divide/:num1/:num2",
-            "method": "GET",
-            "description": "Divide two numbers",
-            "params_type": "query",
-            "params": [
-                {"name": "num1", "type": "integer", "required": true},
-                {"name": "num2", "type": "integer", "required": true}
-            ]
-        }),
-            json!({
-            "route": "/arithmetic/average",
-            "method": "POST",
-            "description": "Calculate the average of a list of numbers",
-            "params_type": "request_body",
-            "params": [
-                {"name": "numbers", "type": "array", "item_type": "integer", "required": true}
+                {"name": "mode", "type": "string", "required": true, "description": "Operation mode (add, subtract, multiply, divide, average)"},
+                {"name": "num1", "type": "integer", "required": true, "description": "First number"},
+                {"name": "num2", "type": "integer", "required": true, "description": "Second number"}
             ]
         }),
         ];
-        routes
+
+        let modes_explanation = vec![
+            json!({
+            "mode": "add",
+            "description": "Add two numbers"
+        }),
+            json!({
+            "mode": "subtract",
+            "description": "Subtract the second number from the first"
+        }),
+            json!({
+            "mode": "multiply",
+            "description": "Multiply two numbers"
+        }),
+            json!({
+            "mode": "divide",
+            "description": "Divide the first number by the second (returns an error if the second number is zero)"
+        }),
+            json!({
+            "mode": "average",
+            "description": "Calculate the average of a list of numbers (POST request)"
+        }),
+        ];
+
+        routes.iter().cloned().chain(modes_explanation).collect()
     }
 }

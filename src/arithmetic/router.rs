@@ -6,59 +6,52 @@ pub mod router {
         Router,
         Json,
     };
+    use axum::extract::Query;
     use serde_json::{json, Value};
     use crate::arithmetic::{
-        service::service::{add_numbers, subtract_numbers, multiply_numbers, divide_numbers, get_average, routes_metadata},
+        service::service::{add_numbers, subtract_numbers, multiply_numbers, divide_numbers, routes_metadata},
     };
+    use serde_derive::Deserialize;
 
     // - - - - - - - - - - - [ROUTES] - - - - - - - - - - -
 
     pub fn arithmetic_routes() -> Router {
-        Router::new()
-            .route("/index", axum::routing::get(index_handler))
-            .route("/arithmetic/add/:num1/:num2", axum::routing::get(add_numbers_handler))
-            .route("/arithmetic/subtract/:num1/:num2", axum::routing::get(subtract_numbers_handler))
-            .route("/arithmetic/multiply/:num1/:num2", axum::routing::get(multiply_numbers_handler))
-            .route("/arithmetic/divide/:num1/:num2", axum::routing::get(divide_numbers_handler))
-            .route("/arithmetic/average", axum::routing::post(calculate_average_handler))
+        Router::new().route("/api/arithmetic", axum::routing::get(arithmetic_handler))
     }
 
     // - - - - - - - - - - - [HANDLERS] - - - - - - - - - - -
 
-    pub async fn index_handler() -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        Ok((StatusCode::OK, Json(routes_metadata())))
-    }
+    pub async fn arithmetic_handler(query: Query<ArithmeticParams>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
+        let params = query.0;
 
-    pub async fn add_numbers_handler(path: Path<(i32, i32)>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        let (num1, num2) = path.0;
-        let result = add_numbers(num1, num2);
-        Ok((StatusCode::CREATED, Json(result)))
-    }
-
-    pub async fn subtract_numbers_handler(path: Path<(i32, i32)>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        let (num1, num2) = path.0;
-        let result = subtract_numbers(num1, num2);
-        Ok((StatusCode::CREATED, Json(result)))
-    }
-
-    pub async fn multiply_numbers_handler(path: Path<(i32, i32)>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        let (num1, num2) = path.0;
-        let result = multiply_numbers(num1, num2);
-        Ok((StatusCode::CREATED, Json(result)))
-    }
-
-    pub async fn divide_numbers_handler(path: Path<(i32, i32)>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        let (numerator, denominator) = path.0;
-        match divide_numbers(numerator, denominator) {
-            Some(result) => Ok((StatusCode::CREATED, Json(result))),
-            None => Err((StatusCode::UNPROCESSABLE_ENTITY, Json(json!({"error": "Divide by zero"}))))
+        match params.mode.as_str() {
+            "add" => {
+                let result = add_numbers(params.num1, params.num2);
+                Ok((StatusCode::CREATED, Json(result)))
+            }
+            "subtract" => {
+                let result = subtract_numbers(params.num1, params.num2);
+                Ok((StatusCode::CREATED, Json(result)))
+            }
+            "multiply" => {
+                let result = multiply_numbers(params.num1, params.num2);
+                Ok((StatusCode::CREATED, Json(result)))
+            }
+            "divide" => match divide_numbers(params.num1, params.num2) {
+                Some(result) => Ok((StatusCode::CREATED, Json(result))),
+                None => Err((StatusCode::UNPROCESSABLE_ENTITY, Json(json!({"error": "Divide by zero"})))),
+            },
+            _ => {
+                // Return magic number on illegal mode
+                Ok((StatusCode::IM_A_TEAPOT, Json(-666.0)))
+            }
         }
     }
 
-    pub async fn calculate_average_handler(Json(input_list): Json<Vec<i32>>) -> Result<impl IntoResponse, (StatusCode, Json<Value>)> {
-        match get_average(&input_list) {
-            Some(average) =>Ok((StatusCode::CREATED, Json(average))),
-            None => Err((StatusCode::UNPROCESSABLE_ENTITY, Json(json!({"error": "Empty input list"}))))
-        }
+    #[derive(Debug, Deserialize)]
+    pub struct ArithmeticParams {
+        mode: String,
+        num1: i32,
+        num2: i32,
     }
 }
