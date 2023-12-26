@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "b5881b2b-55b1-48d2-ae7d-cef9538d6c00",
+		"name": "Hvalfangst Arithmetic API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29899311"
+	},
+	"item": [
+		{
+			"name": "Add",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hvalfangstlinuxfunctionapp.azurewebsites.net/api/arithmetic?mode=add&num1=600&num2=400",
+					"protocol": "https",
+					"host": [
+						"hvalfangstlinuxfunctionapp",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"arithmetic"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "add"
+						},
+						{
+							"key": "num1",
+							"value": "600"
+						},
+						{
+							"key": "num2",
+							"value": "400"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subtract",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hvalfangstlinuxfunctionapp.azurewebsites.net/api/arithmetic?mode=subtract&num1=200&num2=100",
+					"protocol": "https",
+					"host": [
+						"hvalfangstlinuxfunctionapp",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"arithmetic"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "subtract"
+						},
+						{
+							"key": "num1",
+							"value": "200"
+						},
+						{
+							"key": "num2",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Multiply",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hvalfangstlinuxfunctionapp.azurewebsites.net/api/arithmetic?mode=multiply&num1=5&num2=30",
+					"protocol": "https",
+					"host": [
+						"hvalfangstlinuxfunctionapp",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"arithmetic"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "multiply"
+						},
+						{
+							"key": "num1",
+							"value": "5"
+						},
+						{
+							"key": "num2",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Divide",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hvalfangstlinuxfunctionapp.azurewebsites.net/api/arithmetic?mode=divide&num1=1000&num2=4",
+					"protocol": "https",
+					"host": [
+						"hvalfangstlinuxfunctionapp",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"arithmetic"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "divide"
+						},
+						{
+							"key": "num1",
+							"value": "1000"
+						},
+						{
+							"key": "num2",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
