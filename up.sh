@@ -11,3 +11,8 @@ terraform plan;
 
 echo "Applying planned Azure resource provisioning..."
 terraform apply;
+
+wait;
+
+echo "Deploying Axum arithmetic API to Azure Function App..."
+func azure functionapp publish hvalfangstlinuxfunctionapp --custom;
