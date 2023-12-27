@@ -1,0 +1,9 @@
+.git*
+.idea
+.terraform
+postman
+target
+down.sh
+up.sh
+README.md
+terraform.tf
