@@ -1,6 +1,5 @@
 pub mod router {
     use axum::{
-        extract::Path,
         http::StatusCode,
         response::IntoResponse,
         Router,
@@ -9,7 +8,7 @@ pub mod router {
     use axum::extract::Query;
     use serde_json::{json, Value};
     use crate::arithmetic::{
-        service::service::{add_numbers, subtract_numbers, multiply_numbers, divide_numbers, routes_metadata},
+        service::service::{add_numbers, subtract_numbers, multiply_numbers, divide_numbers},
     };
     use serde_derive::Deserialize;
 
